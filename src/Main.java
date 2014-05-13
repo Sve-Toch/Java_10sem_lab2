@@ -1,31 +1,19 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
+//import java.io.BufferedReader;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.jsoup.Jsoup;
-
-import javax.swing.text.Document;
 
 
 public class Main {
-
+private static Logger log=LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
-	
+
 		String url="http://example.com/";		
 		System.out.println("Введите сайт");
-		BufferedReader input=null;
-		/*try {
+		/*BufferedReader input=null;
+		try {
 		input = new BufferedReader(new InputStreamReader(System.in,"cp866"));
 					
 			 url=input.readLine();
@@ -38,15 +26,14 @@ public class Main {
 		/*try {			
 			 fileName2=input.readLine();
 		} catch (IOException e) {
-			System.err.println("Input file name error: "+ e);
+			log.error("Input file name error: "+ e);
 		}  
 		*/
 		DataBase dB = new DataBase();	
 		try {
 			dB.cleanTable();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("Ощибка очистки БД");
 		}
 		Thread pi = new Thread(new PageIndex(url,fileName2, dB));
 		pi.start();
@@ -56,22 +43,22 @@ public class Main {
 		
 		try {
 			pi.join();
-			System.out.println("первый сайт кончился");
+			log.info("Первый сайт кончился");			
 		} catch (InterruptedException e) {
-			System.err.println("sss");
+			log.error("Error join");
 		}
 	/*	try {
 			pi2.join();
-			System.out.println("второй сайт кончился");
+			log.info("второй сайт кончился");
 
 		} catch (InterruptedException e) {
-			System.err.println("sss2");
+				log.error("Error join2")
 		}
 		*/
 		
 		//dB.selectAll();
 		//dB.closeConn();
-	
+
 		
 	}
 

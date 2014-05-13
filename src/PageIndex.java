@@ -10,19 +10,24 @@ import java.util.Map.Entry;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 
 public class PageIndex implements Runnable{
+Logger log=LoggerFactory.getLogger(PageIndex.class);
 private String url;
 private String fileName2;
-private static DataBase dB;
+private DataBase dB;
 	public PageIndex(String url, String fileName2, DataBase dB)
 {
 		this.url=url;
 		this.fileName2=fileName2;
 		this.dB=dB;
 }
-public static HashMap<String, Integer> FindIndex(String[] words,HashMap<String, Integer> wordToCount )
+public  HashMap<String, Integer> FindIndex(String[] words,HashMap<String, Integer> wordToCount )
 { 
  for (String word : words)
 {
@@ -46,7 +51,7 @@ public static HashMap<String, Integer> FindIndex(String[] words,HashMap<String, 
  return wordToCount;
 }
 
-public static void IndexWriter(HashMap<String, Integer> wordToCount,String fileName  ) 
+public  void IndexWriter(HashMap<String, Integer> wordToCount,String fileName  ) 
 {
 	PrintWriter file= WriteFile(fileName);
 	for (Entry<String, Integer> entry : wordToCount.entrySet())
@@ -57,7 +62,7 @@ public static void IndexWriter(HashMap<String, Integer> wordToCount,String fileN
 		 file.close();
 	
 }
-public static PrintWriter WriteFile( String fileName ) 
+public  PrintWriter WriteFile( String fileName ) 
 {
 	try {
 	File file = new File(fileName);
@@ -68,7 +73,7 @@ public static PrintWriter WriteFile( String fileName )
 	return outfile;
 	}
 	catch (IOException ioe) {
-		System.err.println("File error: "+ ioe);	
+		log.error("File error: "+ ioe);	
 		return null;
 	}
 }
@@ -95,9 +100,12 @@ public void run() {
 	bodyText = ((org.jsoup.nodes.Document) htmlPage).body().text();
 	Elements href =htmlPage.select("a[href]");
 	String http = href.attr("href");
+	if (!http.equals("/"))
+	{
 	Thread pi2 =new Thread( new PageIndex(http,fileName2, dB));
 	pi2.start();
-	System.out.println(http);
+	log.info("Найдена сссылка на: "+http);
+	}
 	String[] words = bodyText.split(" ");
 	HashMap<String, Integer> index2 =  new HashMap<String, Integer>();
 	index2 = FindIndex(words,index2);
@@ -112,10 +120,10 @@ public void run() {
 			}
 	}
 	catch(MalformedURLException me){
-	System.err.println("Unnoen host: "+ me);
+	log.error("Unnoen host: "+ me);
 	}
 	catch (IOException ioe) {
-	System.err.println("Input error: "+ ioe);	
+	log.error("Input error: "+ ioe);	
 	}
 }
 

@@ -1,14 +1,19 @@
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class DataBase {
+	Logger log=LoggerFactory.getLogger(DataBase.class);
 	private Connection c=null;
 	public DataBase(){
 		String driver ="com.mysql.jdbc.Driver";
 		try {
 			Class.forName(driver).newInstance();
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			System.err.println("Error of DB Driver" );
+			log.debug("Error of DB Driver" );
 		}
 		try {
 			 c = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "");
@@ -16,7 +21,7 @@ public class DataBase {
 		} 
 		
 		catch (SQLException e) {
-			System.err.println("Error DB connect" );
+			log.debug("Error DB connect" );
 		}
 		
 	}
@@ -38,10 +43,10 @@ public class DataBase {
 		String text ="INSERT INTO WordCount(Word, Count, Adress) VALUES (\""+key+"\",'"+entry.getValue()+"','"+pageName+"')";
 			st.executeUpdate(text);
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Insert error");
 			}	
 		}
-		System.out.println("Еще одна запись в таблицу");
+		log.info("Еще одна запись в таблицу");
 	}
 	public void closeConn()
 	{
@@ -49,7 +54,7 @@ public class DataBase {
 		{try {
 			c.close();
 		} catch (SQLException e) {
-			System.err.println("Error connection close" );
+			log.error("Error connection close" );
 
 			
 		}}
@@ -67,8 +72,7 @@ public class DataBase {
         
     }
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Selrct errror");
 		}
 	}
 }
