@@ -1,4 +1,6 @@
-//import java.io.BufferedReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +11,29 @@ public class Main {
 private static Logger log=LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
-
+		boolean work=true;
+		while(work==true)
+		{
+		BufferedReader input=null;
+		DataBase dB = new DataBase();
+		System.out.println("********************************");		
+		System.out.println("* Для индексации нажмите     1.*\n* Для поиска нажмите         2.*\n* Для очистки данных нажмите 3.*\n* Для выхода нажмите         4.*");
+		System.out.println("********************************");	
+		char c=60;
+		try {
+			input = new BufferedReader(new InputStreamReader(System.in,"cp866"));
+			c  =(char)input.read();
+			
+		} catch (IOException e2) {
+			log.error("ошибка чтения меню");
+		}
+	switch (c){
+	case 49:
+	{
 		String url="http://example.com/";		
 		System.out.println("Введите сайт");
-		/*BufferedReader input=null;
-		try {
+		
+		/*try {
 		input = new BufferedReader(new InputStreamReader(System.in,"cp866"));
 					
 			 url=input.readLine();
@@ -29,12 +49,8 @@ private static Logger log=LoggerFactory.getLogger(Main.class);
 			log.error("Input file name error: "+ e);
 		}  
 		*/
-		DataBase dB = new DataBase();	
-		try {
-			dB.cleanTable();
-		} catch (SQLException e1) {
-			log.error("Ощибка очистки БД");
-		}
+	
+	
 		Thread pi = new Thread(new PageIndex(url,fileName2, dB));
 		pi.start();
 		//Thread pi2 =new Thread( new PageIndex("http://javatechig.com/",fileName2, dB));
@@ -57,10 +73,37 @@ private static Logger log=LoggerFactory.getLogger(Main.class);
 		*/
 		
 		//dB.selectAll();
-		//dB.closeConn();
-
+		//dB.closeConn();		
+	break;}
+	case 50:
+	{
+		log.info("Поиск");
+		System.out.println("Введите слово для поиска");
+		try {
+			input = new BufferedReader(new InputStreamReader(System.in,"cp866"));
+			String word =input.readLine();
+			dB.serch(word);
+		} catch (IOException e) {
+		log.error("ошибка ввода сслова для поиска");		
+		}
 		
+		break;}
+	case 51:{
+		try {
+			dB.cleanTable();
+		} catch (SQLException e1) {
+			log.error("Ощибка очистки БД");
+		}
+	break;}
+	case 52:{
+		work=false;
+		break;}
+	
+	}}
+		log.info("Пока");
+		System.exit(0);
 	}
+	
 
 	
 }

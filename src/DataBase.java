@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class DataBase {
@@ -31,6 +32,7 @@ public class DataBase {
 
 		st = c.createStatement();
 		st.executeUpdate("TRUNCATE TABLE WordCount");
+		log.info("Таблица очищена");
 	}
 	public synchronized void insetPage(String pageName, HashMap<String, Integer> wordToCount)
 	{
@@ -74,5 +76,23 @@ public class DataBase {
 		} catch (SQLException e) {
 			log.error("Selrct errror");
 		}
+	}
+	public void serch(String word)
+	{
+		try (
+				Statement st = c.createStatement();
+				ResultSet rs = st.executeQuery("SELECT Count, Adress, Word FROM test.WordCount Where Word=\""+word+"\" Order by Count Desc ");
+	) {	
+		if (!rs.next()){
+			System.out.println("На ваш запрос ничего не найдено");
+		}
+		else{System.out.println(  rs.getObject(1) +"--"+ rs.getObject(2)+"--"+rs.getObject(3));
+	    while ( rs.next() ) {	   
+	         System.out.println(  rs.getObject(1) +"--"+ rs.getObject(2)+"--"+rs.getObject(3));
+	    }}	   
+			} catch (SQLException e) {
+				log.error("Selrct errror");
+			}
+		
 	}
 }
