@@ -17,7 +17,10 @@ private static Logger log=LoggerFactory.getLogger(Main.class);
 		BufferedReader input=null;
 		DataBase dB = new DataBase();
 		System.out.println("********************************");		
-		System.out.println("* Для индексации нажмите     1.*\n* Для поиска нажмите         2.*\n* Для очистки данных нажмите 3.*\n* Для выхода нажмите         4.*");
+		System.out.println("* Для индексации нажмите     1.*\n* Для поиска нажмите         2.*\n" +
+				"* Для очистки данных нажмите 3.*\n" +
+				"* Для Вывода таблицы нажмите 4.*\n" +
+				"* Для выхода нажмите         5.*");
 		System.out.println("********************************");	
 		char c=60;
 		try {
@@ -92,10 +95,13 @@ private static Logger log=LoggerFactory.getLogger(Main.class);
 		try {
 			dB.cleanTable();
 		} catch (SQLException e1) {
-			log.error("Ощибка очистки БД");
+			log.error("Ощибка очистки таблицы");
 		}
 	break;}
 	case 52:{
+		dB.selectAll();
+	break;}
+	case 53:{
 		work=false;
 		break;}
 	
