@@ -82,7 +82,7 @@ private static Logger log=LoggerFactory.getLogger(Main.class);
 		try {
 			input = new BufferedReader(new InputStreamReader(System.in,"cp866"));
 			String word =input.readLine();
-			dB.serch(word);
+			dB.serch(word.toLowerCase());
 		} catch (IOException e) {
 		log.error("ошибка ввода сслова для поиска");		
 		}

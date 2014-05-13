@@ -33,7 +33,7 @@ public  HashMap<String, Integer> FindIndex(String[] words,HashMap<String, Intege
 {
 	 
   word =word.replace(".", "").replace("‘", "").replace(".", "").replace(",", "").replace("\"","").replace("…", "");
-
+  word=word.toLowerCase();
 	if (word.length()>=2)
 	{
 		if (!wordToCount.containsKey(word))
